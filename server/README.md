@@ -17,8 +17,7 @@ Dependencias para rodar o projeto
 ```
 git clone git@github.com:brunoofarias/mydress.git
 cd mydress/server
-pip install flask
-python app.py
+pip install -r requirements.txt
 ```
 
 ### Contribuir com o projeto
