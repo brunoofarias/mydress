@@ -9,10 +9,26 @@ class ClothesServices():
         db.session.add(self.clothes)
         db.session.commit()
 
-        return True
+        return self.clothes
 
     def getAll(self):
         return Clothes.query.all()
 
     def getById(self, clothes_id):
         return Clothes.query.filter_by(id=clothes_id).first()
+
+    def delete(self, clothes):
+        db.session.delete(clothes)
+        db.session.commit()
+
+    def update(self, clothes, new_clothes):
+        clothes.name = new_clothes.name
+        clothes.priceDay = new_clothes.priceDay
+        clothes.locale = new_clothes.locale
+        clothes.user_id = new_clothes.user_id
+        clothes.type_id = new_clothes.type_id
+        clothes.avaliable = new_clothes.avaliable
+
+        db.session.commit()
+
+        return clothes

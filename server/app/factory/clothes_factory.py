@@ -1,5 +1,6 @@
 from app.utils.utils import Utils
 from app.exceptions.InvalidParamters import InvalidParamtersException
+from app.exceptions.NotFound import NotFoundedException
 from app.models.clothes import Clothes
 
 class ClothesFacotry():
@@ -26,6 +27,7 @@ class ClothesFacotry():
         if data:
             for clothes in data:
                 clothes_list.append({
+                    "id": clothes.id,
                     "name": clothes.name,
                     "priceDay": clothes.priceDay,
                     "locale": clothes.locale,
@@ -39,6 +41,7 @@ class ClothesFacotry():
     @staticmethod
     def createOne(clothes):
         return {
+            "id": clothes.id,
             "name": clothes.name,
             "priceDay": clothes.priceDay,
             "locale": clothes.locale,
@@ -46,3 +49,8 @@ class ClothesFacotry():
             "type_id": clothes.type_id,
             "avaliable": clothes.avaliable,
         }
+
+    @staticmethod
+    def verify(clothes):
+        if (clothes is None):
+            raise NotFoundedException('Roupa não encontrada')
