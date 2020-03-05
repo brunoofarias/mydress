@@ -18,6 +18,14 @@ Dependencias para rodar o projeto
 git clone git@github.com:brunoofarias/mydress.git
 cd mydress/server
 pip install -r requirements.txt
+
+// Para iniciar o banco dados
+python run.py db init
+python run.py db migrate
+python run.py db upgrade
+
+// Para iniciar o servidor
+python run.py runserver
 ```
 
 ### Contribuir com o projeto
