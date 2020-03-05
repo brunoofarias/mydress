@@ -32,3 +32,4 @@ class ClothesServices():
         db.session.commit()
 
         return clothes
+
