@@ -14,4 +14,6 @@ manager.add_command('db', MigrateCommand)
 
 from app.models import profile, user, clothes_types, clothes, clothes_images, location_status, location
 from app.controllers.clothes_controller import clothes
+from app.controllers.user_controller import users
 app.register_blueprint(clothes)
+app.register_blueprint(users)

@@ -10,10 +10,17 @@ class UserServices:
         return user
 
     def getUser(self, user):
-        user_exists = User.query.filter(
-            email=user.email,
-            password=user.password
-        )
+        user_exists = db.session.query(User).filter(
+            User.email==user.email,
+            User.password==user.password
+        ).first()
+
+        return user_exists
+
+    def getUserEmail(self, user):
+        user_exists = db.session.query(User).filter(
+            User.email==user
+        ).first()
 
         return user_exists
 
