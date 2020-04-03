@@ -1,6 +1,7 @@
 from app.utils.utils import Utils
 from app.exceptions.InvalidParamters import InvalidParamtersException
 from app.exceptions.UserAlreadyExists import UserAlreadyExists
+from app.exceptions.UserNotFouded import UserNotFounded
 from app.models.user import User
 from app.models.profile import Profile
 from app.services.profile_services import ProfileServices
@@ -30,7 +31,7 @@ class UserFactory():
     @staticmethod
     def createLogin(data):
         keys = ["email", "password"]
-        if (Utils.arrayKeysExists(data, keys)):
+        if (Utils.arrayKeysExists(data, keys) is False):
             raise InvalidParamtersException('Parametros Invalidos')
 
         user = User()
@@ -40,7 +41,14 @@ class UserFactory():
         return user
 
     @staticmethod
-    def verify(user):
-        if user is not None:
+    def verify(user, login = False):
+        if user is not None and login is False:
             raise UserAlreadyExists('Usuário já existe')
         
+        if user is None and login is True:
+            raise UserNotFounded('Usuário não encontrado')
+        
+    @staticmethod
+    def simpleVerify(user):
+        if user is None:
+            raise UserNotFounded('Usuário não encontrado')
