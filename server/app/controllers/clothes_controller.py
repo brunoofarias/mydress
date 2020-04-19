@@ -2,11 +2,17 @@ from flask import Blueprint, request, jsonify
 from app import app, db
 from app.models.clothes import Clothes
 from app.factory.clothes_factory import ClothesFacotry
+from app.factory.user_factory import UserFactory
 from app.services.clothes_services import ClothesServices
 from app.exceptions.InvalidParamters import InvalidParamtersException
+from app.exceptions.InvalidToken import InvalidTokenException
 from app.exceptions.NotFound import NotFoundedException
+from app.exceptions.UserNotFouded import UserNotFounded
+from app.services.token_services import TokenServices
 
 clothes = Blueprint('clothes', __name__, url_prefix="/clothes")
+
+tokenServices = TokenServices()
 
 @clothes.route("/create", methods=["POST"])
 def create():
@@ -35,10 +41,21 @@ def create():
 @clothes.route("/all", methods=["GET"])
 def all():
     try:
+        user = tokenServices.testToken(request)
+        UserFactory.simpleVerify(user)
+
         clothesServices = ClothesServices(clothes)
         clothes_list = ClothesFacotry().createList(clothesServices.getAll())
 
         return jsonify(clothes_list), 200
+    except InvalidParamtersException:
+        return jsonify({
+            "message": "Parametros invalidos"
+        }), 422
+    except InvalidTokenException:
+        return jsonify({
+            "message": "Token Inválido"
+        }), 401
     except Exception as erro:
         print(erro)
         return jsonify({ "message": 'Erro generico' }), 500

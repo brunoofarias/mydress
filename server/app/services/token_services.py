@@ -6,6 +6,7 @@ load_dotenv()
 import os
 
 from app.exceptions.InvalidToken import InvalidTokenException
+from app.exceptions.InvalidParamters import InvalidParamtersException
 from app.services.user_services import UserServices
 
 class TokenServices:
@@ -24,13 +25,17 @@ class TokenServices:
 
     def testToken(self, request):
         if 'authorization' not in request.headers:
+            raise InvalidParamtersException('Token não fornecido')
+        
+        try:
+            token = request.headers['authorization']
+        
+            decoded = jwt.decode(token, self.secret)
+
+            userServices = UserServices()
+            user = userServices.getUserEmail(decoded['email'])
+
+            return user
+        except Exception as error:
             raise InvalidTokenException('Token inválido')
         
-        token = request.headers['authorization']
-        
-        decoded = jwt.decode(token, self.secret)
-
-        userServices = UserServices()
-        user = userServices.getUserEmail(decoded['email'])
-
-        return user
